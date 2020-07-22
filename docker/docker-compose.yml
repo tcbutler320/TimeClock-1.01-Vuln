@@ -1,0 +1,29 @@
+version: '3.3'
+services:
+  web:
+    build: 
+      context: ./timeclock
+      dockerfile: Dockerfile
+    image: php:7.3-apache
+    container_name: timeclock
+    depends_on:
+      - db
+    volumes:
+      - ./timeclock:/var/www/html/
+    ports:
+      - 80:80
+  db:
+    container_name: timeclock_db
+    image: mysql:latest
+    command: --default-authentication-plugin=mysql_native_password
+    command: --init-file /var/www/html/timeclock.sql
+    volumes:
+        - ./timeclock/timeclock.sql:/var/www/html/
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: timeclock
+      MYSQL_USER: devuser
+      MYSQL_PASSWORD: devpass
+    ports:
+      - 6608:3306

@@ -1,0 +1,115 @@
+/* Body */
+body {
+	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+	text-align: left;
+	margin-left: 40px;
+}
+
+h1 {
+font-size: x-large;
+}
+
+h2 {
+font-size: large;
+color: gray;
+}
+
+/* Links */
+a:link {color: #0000CC; text-decoration: underline; }
+a:active {color: #FF6614; text-decoration: underline; }
+a:visited {color: #0000CC; text-decoration: underline; }
+a:hover {color: #0000FF; text-decoration: underline; }
+
+.button  {
+/*font-size : 12px;*/
+color: #0000FF;
+background-color: #B9C9FE;
+font-weight: bold;
+}
+
+.footer {
+font-size: x-small;
+letter-spacing: 1px;
+}
+
+.nav {
+font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+color: white;
+background-color: #B9C9FE;
+padding: 4px;
+}
+
+.small_button  {
+font-size : 12px;
+color: #000000;
+background-color: silver;
+font-weight: bold;
+width: 60px;
+letter-spacing: 1px;
+}
+
+
+#box-table-a
+{
+	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+	font-size: 12px;
+	margin: 5px;
+/*	width: 600px; */
+	text-align: left;
+	border-collapse: collapse;
+}
+#box-table-a th
+{
+	font-size: 13px;
+	font-weight: normal;
+	padding: 8px;
+	background: #b9c9fe;
+	border-top: 4px solid #aabcfe;
+	border-bottom: 1px solid #fff;
+	color: #039;
+}
+#box-table-a td
+{
+	padding: 8px;
+	background: #e8edff; 
+	border-bottom: 1px solid #fff;
+	color: #669;
+	border-top: 1px solid transparent;
+}
+#box-table-a tr:hover td
+{
+	background: #d0dafd;
+	color: #339;
+}
+
+
+#box-table-b
+{
+	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+	font-size: 12px;
+	margin: 45px;
+	width: 480px;
+	text-align: center;
+	border-collapse: collapse;
+	border-top: 7px solid #9baff1;
+	border-bottom: 7px solid #9baff1;
+}
+#box-table-b th
+{
+	font-size: 13px;
+	font-weight: normal;
+	padding: 8px;
+	background: #e8edff;
+	border-right: 1px solid #9baff1;
+	border-left: 1px solid #9baff1;
+	color: #039;
+}
+#box-table-b td
+{
+	padding: 8px;
+	background: #e8edff; 
+	border-right: 1px solid #aabcfe;
+	border-left: 1px solid #aabcfe;
+	color: #669;
+}
+
