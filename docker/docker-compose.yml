@@ -1,29 +1,33 @@
-version: '3.3'
+version: '3.2'
 services:
-  web:
-    build: 
-      context: ./timeclock
-      dockerfile: Dockerfile
-    image: php:7.3-apache
-    container_name: timeclock
-    depends_on:
-      - db
-    volumes:
-      - ./timeclock:/var/www/html/
-    ports:
-      - 80:80
+    php-apache:
+        build:
+          context: ./timeclock
+        #image: php:7.2.1-apache
+        ports:
+            - "127.0.0.1:8000:80"
+        volumes:
+            - ./timeclock:/var/www/html
+        links:
+            - 'db'
+    db:
+      image: mysql:5.7
+      volumes:
+          - ./db:/var/lib/mysql
+      environment:
+          MYSQL_ROOT_PASSWORD: "rootpwd"
+          MYSQL_USER: 'devuser'
+          MYSQL_PASSWORD: 'devpass'
+          MYSQL_DATABASE: 'timeclock'
+    phpmyadmin:
+      depends_on:
+        - db
+      image: phpmyadmin/phpmyadmin
+      container_name: phpmyadmin
+      restart: always
+      ports:
+        - '127.0.0.1:8080:80'
+      environment:
+        PMA_HOST: db
+volumes:
   db:
-    container_name: timeclock_db
-    image: mysql:latest
-    command: --default-authentication-plugin=mysql_native_password
-    command: --init-file /var/www/html/timeclock.sql
-    volumes:
-        - ./timeclock/timeclock.sql:/var/www/html/
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: timeclock
-      MYSQL_USER: devuser
-      MYSQL_PASSWORD: devpass
-    ports:
-      - 6608:3306

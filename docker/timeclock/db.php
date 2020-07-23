@@ -5,13 +5,13 @@
 $db_name = "timeclock";
 
 /** mysql database username */
-$db_user = "root";
+$db_user = "devuser";
 
 /** mysql database password */
 $db_password = "devpass";
 
 /** mysql hostname */
-$db_host = "timeclock_db";
+$db_host = "db";
 
 $db = mysqli_connect($db_host, $db_user, $db_password,$db_name);
 
