@@ -6,27 +6,40 @@ This report details a time-based SQL injection attack in the Employee Timeclock 
   - [About Authors](#about-authors)
   - [Navigating the Report](#navigating-the-report)
   - [About Timeclock](#about-timeclock)
-    - [Product Versions](#product-versions)
+  - [About the Vulnerability](#about-the-vulnerability)
 - [Testing the POC](#testing-the-poc)
   - [Requirements](#requirements)
     - [Docker](#docker)
     - [Docker-Compose](#docker-compose)
-    - [Python](#python)
+    - [Python3](#python3)
+  - [Test Against Our Server](#test-against-our-server)
   - [Remote Testing](#remote-testing)
     - [Clone the repository](#clone-the-repository)
     - [CD into Docker](#cd-into-docker)
     - [Run the app](#run-the-app)
     - [Browse timeclock](#browse-timeclock)
+    - [Running the PoC](#running-the-poc)
   - [Local Testing](#local-testing)
     - [Clone the repository](#clone-the-repository-1)
     - [CD into Docker-Local](#cd-into-docker-local)
     - [Run the app](#run-the-app-1)
     - [Browse timeclock](#browse-timeclock-1)
+    - [Testing the PoC](#testing-the-poc-1)
 - [Running Docker on Remote Server](#running-docker-on-remote-server)
   - [Spin up a server](#spin-up-a-server)
   - [Download Docker Installation Script](#download-docker-installation-script)
   - [Install Docker](#install-docker)
   - [Install Dockerized Timeclock](#install-dockerized-timeclock)
+- [Creating Docker App from Source](#creating-docker-app-from-source)
+  - [Create Folder Structure](#create-folder-structure)
+  - [Download Source Files](#download-source-files)
+  - [Create Docker-Compose](#create-docker-compose)
+  - [Create a Dockerfile](#create-a-dockerfile)
+  - [Add DB Information](#add-db-information)
+  - [Start Application](#start-application)
+  - [Log into phpmyadmin](#log-into-phpmyadmin)
+  - [Import the timeclock database](#import-the-timeclock-database)
+  - [Log into Timeclock Application](#log-into-timeclock-application)
 
 
 # Overview  
@@ -62,9 +75,23 @@ A high level overview of the submission contents.
 
 The application uses php to enable employees to log working time by category, and includes administration options for admins to manage the app and employees. The download for version 1.01 includes a .sql file to create a database schema and populates it with default values
 
-### Product Versions 
+**Product Versions**
 
 Timeclock's official website supports versions up to 1.01 which was released on 1-28-2016. It can be acquired through the [download page](http://timeclock-software.net/timeclock-download.php)
+
+## About the Vulnerability   
+
+The timeclock 1.01 application is vulnerable to a time-based slq injection in the add time option for regular users. This vulnerability allows an attacked to automate guessing of different database columns and tables to enumerate the entire database. The location of the vulnerabiliy is [app ip]/add_time.php. The exploit process works by passing queries to the database throught the SQLi on the notes section of add_time.php. If the query returns true, then a "1" will put in the notes. If the query returns false, then a "0" will be put in the notes.  
+
+The PoC created to demonstrate the vulnerability guesses if several usernames exist in the database. Below is the payload. 
+
+
+```python
+payload = f"' OR IF((SELECT username FROM user_info WHERE username='{user}')='{user}', SLEEP(5), NULL)='"
+
+```    
+
+When run against a timeclock application, such as the dockerized app in this report or our remote testing server at http://159.203.41.34/add_entry.php, the default users Fred and Admin are found. 
 
 # Testing the POC  
 To validate the findings of this report, the timeclock 1.01 application was dockerized into two separate apps. The app in /docker is ported to expose port 80 to the internet and can be used for testing remotely over HTTP on a server. The app in /docker-local is ported to localhost:80 and can be used to test locally.
@@ -74,7 +101,7 @@ Testing the exploit described in this report requires the use of docker, docker-
 
 ### [Docker](https://www.docker.com/)  
 
-*Linux*  
+*Installation on Linux*  
 
 ```bash
 curl -fsSL https://get.docker.com -o get-docker.sh
@@ -86,7 +113,7 @@ sudo sh get-docker.sh
 
 ### [Docker-Compose](https://docs.docker.com/compose/)
 
-*Linux*
+*Installation on Linux*
 
 Download binaries via curl
 ```bash
@@ -98,13 +125,16 @@ Make binaries executable
 sudo chmod +x /usr/local/bin/docker-compose
 ```  
 
-### [Python](https://www.python.org/) 
+### [Python3](https://www.python.org/) 
 
-*Linux*    
+*Installation on  Linux*    
 
 ```bash
 sudo apt-get install python3.6
 ```
+
+## Test Against Our Server   
+For a limited time, we are running a dockerized timeclock 1.01 on a remote digital ocean server. If you'd like to access the applicaiton, go to http://159.203.41.34/.  
 
 
 
@@ -130,7 +160,19 @@ docker-compose up -d
 ```
 
 ### Browse timeclock   
-In your browser, visit http://[ip of server]
+In your browser, visit http://[ip of server]  
+
+### Running the PoC
+
+Run the PoC python appplication against the remote timeclock app with the following.  
+
+```python
+python3 PoC.py
+``` 
+
+The output shows the admin and fred user were found.  
+
+![](img/PoC.png)
 
 ## Local Testing     
 */docker-local contains a dockerized timeclock 1.01 application that only runs locally on 127.0.0.1:80 on the host. 
@@ -156,6 +198,22 @@ docker-compose up -d
 ### Browse timeclock   
 In your browser, visit http://127.0.0.1 
 
+### Testing the PoC
+
+The current PoC is built for remote testing. You can test locally by manually imputing the exploit into the app. Log in with the Fred:fred user. Navigate to the time entry form at localhost/add_entry.php.   
+
+Create a new entry by filling out all the feilds. In the notes section, place the exploit code.   
+
+
+```sql 
+' OR IF((SELECT username FROM user_info WHERE username='fred')='fred', SLEEP(5), NULL)='
+```  
+![](/img/time_entry.png)
+
+Select "Add". The application will hang for 5 seconds as it sleeps. When it finisheds, you will notice a "1" in the notes feild. This indicates that the user was found. Should you test with a different username, you will notice a "0", indicating that no user was found.   
+
+![](img/success.png)
+
 
 # Running Docker on Remote Server   
 The following steps were used to replicate the exploit on a digital ocean droplet.  
@@ -177,4 +235,107 @@ sudo sh get-docker.sh
 ```  
 
 ## Install Dockerized Timeclock  
-See [Remote Testing](#remote-testing) for instructions for installing the POC docker application for remote testing
+See [Remote Testing](#remote-testing) for instructions for installing the POC docker application for remote testing  
+
+
+# Creating Docker App from Source 
+The following instructions detail how to create your own docker application from the timeclock source files 
+
+## Create Folder Structure   
+
+```bash
+mkdir docker
+mkdir /docker/db/
+mkdir /docker/timeclock
+``` 
+
+## Download Source Files  
+Download version 1.01 from the [download page](http://timeclock-software.net/timeclock-download.php). Unzip the file and place files inside docker folder at /docker/timeclock.
+
+
+## Create Docker-Compose  
+
+Make a new docker-compose.yml file at the root of the /docker folder with the following information.
+
+```yml
+version: '3.2'
+services:
+    php-apache:
+        depends_on:
+            - db
+        build:
+          context: ./timeclock
+        ports:
+            - 80:80
+        volumes:
+            - ./timeclock:/var/www/html
+        links:
+            - 'db'
+    db:
+      image: mysql:5.7
+      volumes:
+          - ./db:/var/lib/mysql
+      environment:
+          MYSQL_ROOT_PASSWORD: "rootpwd"
+          MYSQL_USER: 'devuser'
+          MYSQL_PASSWORD: 'devpass'
+          MYSQL_DATABASE: 'timeclock'
+    phpmyadmin:
+      depends_on:
+        - db
+      image: phpmyadmin/phpmyadmin
+      container_name: phpmyadmin
+      restart: always
+      ports:
+        - 8080:80
+      environment:
+        PMA_HOST: db
+volumes:
+  db:
+```
+
+## Create a Dockerfile  
+
+In the /timeclock folder, create a file called Dockerfile. In it, put the following information.  
+
+```yml
+FROM php:7.2.1-apache
+RUN docker-php-ext-install pdo pdo_mysql mysqli
+```
+## Add DB Information
+
+In the /timeclock folder, edit the db.php file to reference your database. Change the following lines to reference the dockerized db. 
+
+```php
+/** the name of the database */
+$db_name = "timeclock";
+
+/** mysql database username */
+$db_user = "devuser";
+
+/** mysql database password */
+$db_password = "devpass";
+
+/** mysql hostname */
+$db_host = "db";
+```
+
+## Start Application
+
+```bash
+docker-compose up -d
+```
+
+## Log into phpmyadmin  
+
+In your browser, go to 127.0.0.1:8080. The log in credentials for phpmyadmin are devuser;devpass. On the left hand-side, select the timeclock database.  
+
+## Import the timeclock database 
+
+At the top of the timeclock db page, select "import". On the pop-up file explorer, select the timeclock.sql file downloaded from the vendor. Once selected, select "go" at the bottom. 
+
+![](img/phpmyadmin.png)
+
+## Log into Timeclock Application
+
+The timeclock app has now been dockerized from source. To log in, go to 127.0.0.1:80 in your browser. The default credentials are Admin:admin and Fred:fred. 
