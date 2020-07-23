@@ -1,11 +1,12 @@
 version: '3.2'
 services:
     php-apache:
+        depends_on:
+            - db
         build:
           context: ./timeclock
-        #image: php:7.2.1-apache
         ports:
-            - "127.0.0.1:8000:80"
+            - 80:80
         volumes:
             - ./timeclock:/var/www/html
         links:
@@ -19,15 +20,15 @@ services:
           MYSQL_USER: 'devuser'
           MYSQL_PASSWORD: 'devpass'
           MYSQL_DATABASE: 'timeclock'
-    phpmyadmin:
-      depends_on:
-        - db
-      image: phpmyadmin/phpmyadmin
-      container_name: phpmyadmin
-      restart: always
-      ports:
-        - '127.0.0.1:8080:80'
-      environment:
-        PMA_HOST: db
+#    phpmyadmin:
+#      depends_on:
+#        - db
+#      image: phpmyadmin/phpmyadmin
+#      container_name: phpmyadmin
+ #     restart: always
+  #    ports:
+  #      - 80:80
+  #    environment:
+  #      PMA_HOST: db
 volumes:
   db:
