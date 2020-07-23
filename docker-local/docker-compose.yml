@@ -20,15 +20,15 @@ services:
           MYSQL_USER: 'devuser'
           MYSQL_PASSWORD: 'devpass'
           MYSQL_DATABASE: 'timeclock'
-#    phpmyadmin:
-#      depends_on:
-#        - db
-#      image: phpmyadmin/phpmyadmin
-#      container_name: phpmyadmin
- #     restart: always
-  #    ports:
-  #      - 80:80
-  #    environment:
-  #      PMA_HOST: db
+    phpmyadmin:
+      depends_on:
+        - db
+      image: phpmyadmin/phpmyadmin
+      container_name: phpmyadmin
+      restart: always
+      ports:
+        - 8080:80
+      environment:
+        PMA_HOST: db
 volumes:
   db:

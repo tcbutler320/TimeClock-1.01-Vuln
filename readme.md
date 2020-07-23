@@ -68,7 +68,7 @@ payload = f"' OR IF((SELECT username FROM user_info WHERE username='{user}')='{u
 When running against a timeclock application, such as the dockerized app in this report or our remote testing server at http://159.203.41.34/add_entry.php, the default users Fred and Admin are found. 
 
 # Testing the POC  
-To validate the findings of this report, the timeclock 1.01 application was dockerized into two separate apps. The app in /docker is ported to expose port 80 to the internet and can be used for testing remotely over HTTP on a server. The app in /docker-local is ported to localhost:80 and can be used to test locally.
+To validate the findings of this report, the timeclock 1.01 application was dockerized into two separate apps. The app in /docker is ported to expose port 80 to the internet and can be used for testing remotely over HTTP on a server. The app in /docker-local is ported to localhost:80 and can be used to test locally. Additionally the application is running at http://159.203.41.34/ for a limited time.
 
 ## Requirements  
 Testing the exploit described in this report requires the use of docker, docker-compose, and python.
@@ -109,6 +109,13 @@ sudo apt-get install python3.6
 
 ## Test Against Our Server   
 For a limited time, we are running a dockerized timeclock 1.01 on a remote digital ocean server. If you'd like to access the applicaiton, go to http://159.203.41.34/.  
+
+**Run the PoC**
+To test the findings, simply run the PoC which is by default pointed at this testing server.  
+
+```bash
+python3 PoC.py
+```  
 
 
 
