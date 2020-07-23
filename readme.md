@@ -171,7 +171,7 @@ docker-compose up -d
 ```
 
 **Browse timeclock** 
-In your browser, visit http://127.0.0.1 
+In your browser, visit http://[ip]
 
 **Testing the PoC**
 
