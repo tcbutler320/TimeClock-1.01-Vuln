@@ -3,8 +3,10 @@ This report details a time-based SQL injection attack in the Employee Timeclock 
 
 - [Timeclock 1.01 Time-Based SQL Injection](#timeclock-101-time-based-sql-injection)
 - [Overview](#overview)
+  - [About Authors](#about-authors)
   - [Navigating the Report](#navigating-the-report)
   - [About Timeclock](#about-timeclock)
+    - [Product Versions](#product-versions)
 - [Testing the POC](#testing-the-poc)
   - [Requirements](#requirements)
     - [Docker](#docker)
@@ -28,9 +30,14 @@ This report details a time-based SQL injection attack in the Employee Timeclock 
 
 
 # Overview  
-This report details a time-based SQL injection attack in the Employee Timeclock software, version 1.01. Included in the report are the following items;
+This report details a time-based SQL injection attack in the Employee Timeclock software, version 1.01. Included in the report are a exploit-db ready report, two dockerized timeclock 1.01 applications for testing (1 for remote and 1 for local), and this readme document.  
 
-## Navigating the Report
+## About Authors  
+
+This vulnerability was discovered by François Bibeau who also developed the proof of concept exploit. Additional support was provided by [Tyler Butler](https://tbutler.org) who developed the dockerized application and testing enviorment. 
+
+## Navigating the Report  
+A high level overview of the submission contents.
 
 ```bash
 .
@@ -42,19 +49,30 @@ This report details a time-based SQL injection attack in the Employee Timeclock 
 │   ├── db  
 │   ├── docker-compose.yml  
 │   └── timeclock  
+├── PoC.py  # A PoC python script 
 ├── exploit-db-entry.txt  # Exploit-db ready vuln description
 └── readme.md    
 ```
 
 ## About Timeclock
 
+[Timeclock](http://timeclock-software.net/) is a employee time managment application managed by timeclock-software.net. According to the vendor's website,
 
-# Testing the POC
+> Timeclock-software.net's free software product will be a simple solution to allow your employees to record their time in one central location for easy access.    
+
+The application uses php to enable employees to log working time by category, and includes administration options for admins to manage the app and employees. The download for version 1.01 includes a .sql file to create a database schema and populates it with default values
+
+### Product Versions 
+
+Timeclock's official website supports versions up to 1.01 which was released on 1-28-2016. It can be acquired through the [download page](http://timeclock-software.net/timeclock-download.php)
+
+# Testing the POC  
+To validate the findings of this report, the timeclock 1.01 application was dockerized into two separate apps. The app in /docker is ported to expose port 80 to the internet and can be used for testing remotely over HTTP on a server. The app in /docker-local is ported to localhost:80 and can be used to test locally.
 
 ## Requirements  
 Testing the exploit described in this report requires the use of docker, docker-compose, and python.
 
-### Docker
+### [Docker](https://www.docker.com/)  
 
 *Linux*  
 
@@ -66,7 +84,7 @@ curl -fsSL https://get.docker.com -o get-docker.sh
 sudo sh get-docker.sh
 ```
 
-### Docker-Compose
+### [Docker-Compose](https://docs.docker.com/compose/)
 
 *Linux*
 
@@ -80,7 +98,7 @@ Make binaries executable
 sudo chmod +x /usr/local/bin/docker-compose
 ```  
 
-### Python 
+### [Python](https://www.python.org/) 
 
 *Linux*    
 
