@@ -1,0 +1,1 @@
+<p class="footer">powered by <a href="http://timeclock-software.net/" target="_blank">timeclock software</a></p>
