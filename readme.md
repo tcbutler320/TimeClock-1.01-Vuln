@@ -64,7 +64,7 @@ payload = f"' OR IF((SELECT username FROM user_info WHERE username='{user}')='{u
 
 ```    
 
-When run against a timeclock application, such as the dockerized app in this report or our remote testing server at http://159.203.41.34/add_entry.php, the default users Fred and Admin are found. 
+When running against a timeclock application, such as the dockerized app in this report or our remote testing server at http://159.203.41.34/add_entry.php, the default users Fred and Admin are found. 
 
 # Testing the POC  
 To validate the findings of this report, the timeclock 1.01 application was dockerized into two separate apps. The app in /docker is ported to expose port 80 to the internet and can be used for testing remotely over HTTP on a server. The app in /docker-local is ported to localhost:80 and can be used to test locally.
@@ -139,7 +139,7 @@ In your browser, visit http://[ip of server]
 
 **Running the PoC**
 
-Run the PoC python appplication against the remote timeclock app with the following.  
+Run the PoC python appplication against the remote timeclock app with the following. Make sure to change the target ip to the ip of the application your testing against.  
 
 ```python
 python3 PoC.py

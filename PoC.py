@@ -13,7 +13,7 @@ import time
 import requests
 
 
-login_url = 'http://159.203.41.34/login_action.php'    # Change ip to application ip 
+login_url = 'http://159.203.41.34/login_action.php'    # Ensure to change ip to match target
 login_data = {'username':'fred','password':'fred','submit':'Log In'}
 headers = {'User-Agent': 'Mozilla/5.0'}
 
