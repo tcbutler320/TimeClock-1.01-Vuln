@@ -1,7 +1,7 @@
-# Timeclock 1.01 Time-Based SQL Injection    
-This report details a time-based SQL injection attack in the Employee Timeclock software, version 1.01.  
+# TimeClock Software 1.01 Authenticated Time-Based SQL Injection   
+> This report details a time-based SQL injection attack in the Employee Timeclock software, version 1.01.  
 
-- [Timeclock 1.01 Time-Based SQL Injection](#timeclock-101-time-based-sql-injection)
+- [TimeClock Software 1.01 Authenticated Time-Based SQL Injection](#timeclock-software-101-authenticated-time-based-sql-injection)
 - [Overview](#overview)
   - [About Authors](#about-authors)
   - [Navigating the Report](#navigating-the-report)
@@ -9,37 +9,11 @@ This report details a time-based SQL injection attack in the Employee Timeclock 
   - [About the Vulnerability](#about-the-vulnerability)
 - [Testing the POC](#testing-the-poc)
   - [Requirements](#requirements)
-    - [Docker](#docker)
-    - [Docker-Compose](#docker-compose)
-    - [Python3](#python3)
   - [Test Against Our Server](#test-against-our-server)
   - [Remote Testing](#remote-testing)
-    - [Clone the repository](#clone-the-repository)
-    - [CD into Docker](#cd-into-docker)
-    - [Run the app](#run-the-app)
-    - [Browse timeclock](#browse-timeclock)
-    - [Running the PoC](#running-the-poc)
   - [Local Testing](#local-testing)
-    - [Clone the repository](#clone-the-repository-1)
-    - [CD into Docker-Local](#cd-into-docker-local)
-    - [Run the app](#run-the-app-1)
-    - [Browse timeclock](#browse-timeclock-1)
-    - [Testing the PoC](#testing-the-poc-1)
 - [Running Docker on Remote Server](#running-docker-on-remote-server)
-  - [Spin up a server](#spin-up-a-server)
-  - [Download Docker Installation Script](#download-docker-installation-script)
-  - [Install Docker](#install-docker)
-  - [Install Dockerized Timeclock](#install-dockerized-timeclock)
 - [Creating Docker App from Source](#creating-docker-app-from-source)
-  - [Create Folder Structure](#create-folder-structure)
-  - [Download Source Files](#download-source-files)
-  - [Create Docker-Compose](#create-docker-compose)
-  - [Create a Dockerfile](#create-a-dockerfile)
-  - [Add DB Information](#add-db-information)
-  - [Start Application](#start-application)
-  - [Log into phpmyadmin](#log-into-phpmyadmin)
-  - [Import the timeclock database](#import-the-timeclock-database)
-  - [Log into Timeclock Application](#log-into-timeclock-application)
 
 
 # Overview  
@@ -63,7 +37,6 @@ A high level overview of the submission contents.
 │   ├── docker-compose.yml  
 │   └── timeclock  
 ├── PoC.py  # A PoC python script 
-├── exploit-db-entry.txt  # Exploit-db ready vuln description
 └── readme.md    
 ```
 
@@ -99,7 +72,7 @@ To validate the findings of this report, the timeclock 1.01 application was dock
 ## Requirements  
 Testing the exploit described in this report requires the use of docker, docker-compose, and python.
 
-### [Docker](https://www.docker.com/)  
+**[Docker](https://www.docker.com/)** 
 
 *Installation on Linux*  
 
@@ -111,7 +84,7 @@ curl -fsSL https://get.docker.com -o get-docker.sh
 sudo sh get-docker.sh
 ```
 
-### [Docker-Compose](https://docs.docker.com/compose/)
+**[Docker-Compose](https://docs.docker.com/compose/)**
 
 *Installation on Linux*
 
@@ -125,7 +98,7 @@ Make binaries executable
 sudo chmod +x /usr/local/bin/docker-compose
 ```  
 
-### [Python3](https://www.python.org/) 
+**[Python3](https://www.python.org/)**
 
 *Installation on  Linux*    
 
@@ -138,31 +111,33 @@ For a limited time, we are running a dockerized timeclock 1.01 on a remote digit
 
 
 
+
+
 ## Remote Testing 
 /docker contains a dockerized timeclock 1.01 application that exposes port 80 of the container to port 80 of the host. If this is run on a remote server such as a digital ocean droplet, then this will be publically available through http://[ip of server]:80
 
-### Clone the repository 
+**Clone the repository**
 
 ```bash
 git clone https://github.com/tcbutler320/timeclock-vuln.git
 ```
 
-### CD into Docker 
+**CD into Docker**
 
 ```bash
 cd /timeclock-vuln/docker
 ```
 
-### Run the app 
+**Run the app**
 
 ```bash
 docker-compose up -d
 ```
 
-### Browse timeclock   
+**Browse timeclock**
 In your browser, visit http://[ip of server]  
 
-### Running the PoC
+**Running the PoC**
 
 Run the PoC python appplication against the remote timeclock app with the following.  
 
@@ -177,28 +152,28 @@ The output shows the admin and fred user were found.
 ## Local Testing     
 */docker-local contains a dockerized timeclock 1.01 application that only runs locally on 127.0.0.1:80 on the host. 
 
-### Clone the repository 
+**Clone the repository**
 
 ```bash
 git clone https://github.com/tcbutler320/timeclock-vuln.git
 ```  
 
-### CD into Docker-Local
+**CD into Docker-Local**
 
 ```bash
 cd /timeclock-vuln/docker-local
 ```  
 
-### Run the app 
+**Run the app**
 
 ```bash
 docker-compose up -d
 ```
 
-### Browse timeclock   
+**Browse timeclock** 
 In your browser, visit http://127.0.0.1 
 
-### Testing the PoC
+**Testing the PoC**
 
 The current PoC is built for remote testing. You can test locally by manually imputing the exploit into the app. Log in with the Fred:fred user. Navigate to the time entry form at localhost/add_entry.php.   
 
@@ -218,30 +193,30 @@ Select "Add". The application will hang for 5 seconds as it sleeps. When it fini
 # Running Docker on Remote Server   
 The following steps were used to replicate the exploit on a digital ocean droplet.  
 
-## Spin up a server
+**Spin up a server**
 For information on setting up a droplet on digital ocean, see [How to Create a Droplet from the DigitalOcean Control Panel](https://www.digitalocean.com/docs/droplets/how-to/create/).  For information on installing docker on ubunto, see [Install Docker Engine on Ubuntu
 ](https://docs.docker.com/engine/install/ubuntu/)
 
-## Download Docker Installation Script 
+**Download Docker Installation Script** 
 
 ```bash
 curl -fsSL https://get.docker.com -o get-docker.sh
 ```
 
-## Install Docker 
+**Install Docker** 
 
 ```bash
 sudo sh get-docker.sh
 ```  
 
-## Install Dockerized Timeclock  
+**Install Dockerized Timeclock**  
 See [Remote Testing](#remote-testing) for instructions for installing the POC docker application for remote testing  
 
 
 # Creating Docker App from Source 
 The following instructions detail how to create your own docker application from the timeclock source files 
 
-## Create Folder Structure   
+**Create Folder Structure**   
 
 ```bash
 mkdir docker
@@ -249,11 +224,11 @@ mkdir /docker/db/
 mkdir /docker/timeclock
 ``` 
 
-## Download Source Files  
+**Download Source Files**  
 Download version 1.01 from the [download page](http://timeclock-software.net/timeclock-download.php). Unzip the file and place files inside docker folder at /docker/timeclock.
 
 
-## Create Docker-Compose  
+**Create Docker-Compose**  
 
 Make a new docker-compose.yml file at the root of the /docker folder with the following information.
 
@@ -294,7 +269,7 @@ volumes:
   db:
 ```
 
-## Create a Dockerfile  
+**Create a Dockerfile**  
 
 In the /timeclock folder, create a file called Dockerfile. In it, put the following information.  
 
@@ -302,7 +277,7 @@ In the /timeclock folder, create a file called Dockerfile. In it, put the follow
 FROM php:7.2.1-apache
 RUN docker-php-ext-install pdo pdo_mysql mysqli
 ```
-## Add DB Information
+**Add DB Information**
 
 In the /timeclock folder, edit the db.php file to reference your database. Change the following lines to reference the dockerized db. 
 
@@ -320,22 +295,22 @@ $db_password = "devpass";
 $db_host = "db";
 ```
 
-## Start Application
+**Start Application**
 
 ```bash
 docker-compose up -d
 ```
 
-## Log into phpmyadmin  
+**Log into phpmyadmin** 
 
 In your browser, go to 127.0.0.1:8080. The log in credentials for phpmyadmin are devuser;devpass. On the left hand-side, select the timeclock database.  
 
-## Import the timeclock database 
+**Import the timeclock database** 
 
 At the top of the timeclock db page, select "import". On the pop-up file explorer, select the timeclock.sql file downloaded from the vendor. Once selected, select "go" at the bottom. 
 
 ![](img/phpmyadmin.png)
 
-## Log into Timeclock Application
+**Log into Timeclock Application**
 
 The timeclock app has now been dockerized from source. To log in, go to 127.0.0.1:80 in your browser. The default credentials are Admin:admin and Fred:fred. 

