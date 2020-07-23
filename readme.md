@@ -22,7 +22,7 @@ This report details a time-based SQL injection attack in the Employee Timeclock 
 
 ## About Authors  
 
-This vulnerability was discovered by François Bibeau who also developed the proof of concept exploit. Additional support was provided by [Tyler Butler](https://tbutler.org) who developed the dockerized application and testing enviorment. 
+This vulnerability was discovered by [François Bibeau](https://github.com/fbibeau) who also developed the proof of concept exploit. Additional support was provided by [Tyler Butler](https://tbutler.org) who developed the dockerized application and testing enviorment. 
 
 ## Navigating the Report  
 A high level overview of the submission contents.
