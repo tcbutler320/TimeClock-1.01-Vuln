@@ -22,7 +22,7 @@ This report details a time-based SQL injection attack in the Employee Timeclock 
 
 ## About Authors  
 
-This vulnerability was discovered by [François Bibeau](https://github.com/fbibeau) who also developed the proof of concept exploit. Additional support was provided by [Tyler Butler](https://tbutler.org) who developed the dockerized application and testing enviorment. 
+This vulnerability was discovered by [François Bibeau](https://github.com/fbibeau) who also developed the proof of concept exploit. Additional support was provided by [Tyler Butler](https://tbutler.org) who developed the dockerized application and testing environment. 
 
 ## Navigating the Report  
 A high level overview of the submission contents.
@@ -43,11 +43,11 @@ A high level overview of the submission contents.
 
 ## About Timeclock
 
-[Timeclock](http://timeclock-software.net/) is a employee time managment application managed by timeclock-software.net. According to the vendor's website,
+[Timeclock](http://timeclock-software.net/) is a employee time managment application managed by timeclock-software.net. According to the vendor's website :
 
 > Timeclock-software.net's free software product will be a simple solution to allow your employees to record their time in one central location for easy access.    
 
-The application uses php to enable employees to log working time by category, and includes administration options for admins to manage the app and employees. The download for version 1.01 includes a .sql file to create a database schema and populates it with default values
+The application uses PHP to enable employees to log working time by category, and includes administration options for admins to manage the app and employees. The download for version 1.01 includes a .sql file to create a database schema and populates it with default values.
 
 **Product Versions**
 
@@ -117,10 +117,6 @@ To test the findings, simply run the PoC which is by default pointed at this tes
 python3 PoC.py
 ```  
 
-
-
-
-
 ## Remote Testing 
 /docker contains a dockerized timeclock 1.01 application that exposes port 80 of the container to port 80 of the host. If this is run on a remote server such as a digital ocean droplet, then this will be publically available through http://[ip of server]:80
 
@@ -147,7 +143,7 @@ In your browser, visit http://[ip of server]
 
 **Running the PoC**
 
-Run the PoC python appplication against the remote timeclock app with the following. Make sure to change the target ip to the ip of the application your testing against.  
+Run the PoC python appplication against the remote timeclock app with the following. Make sure to change the target IP to the IP of the application your testing against.  
 
 ```python
 python3 PoC.py
@@ -332,7 +328,7 @@ The PoC works by exploiting the time-based sqli to query the database in true/fa
 ```    
 
 
-Upon execution the application will hang for the sleep time. When it finisheds, you will notice a "1" in the notes feild. This indicates that the user was found. Should you test with a different username, you will notice a "0", indicating that no user was found.     
+Upon execution the application will hang for the sleep time. When it finisheds, you will notice a "1" in the notes field. This indicates that the user was found. Should you test with a different username, you will notice a "0", indicating that no user was found.     
 
 
 The image below shows a manual test of the PoC, where the username 'fred' is being tested.   
@@ -345,11 +341,3 @@ As you can see below, the response of "1" means the user was found.
 
 
 ![](img/success.png)
-
-
-
-
-
-
-
-
