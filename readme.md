@@ -20,6 +20,9 @@
 # Overview  
 This report details a time-based SQL injection attack in the Employee Timeclock software, version 1.01. Included in the report are a exploit-db ready report, two dockerized timeclock 1.01 applications for testing (1 for remote and 1 for local), and this readme document.  
 
+*Edited 10/27/2020: The remote testing server is being shut down. Please contact [Tyler Butler](https://twitter.com/tbutler0x90) if you have questions about it*
+
+
 ## About Authors  
 
 This vulnerability was discovered by François Bibeau who also developed the proof of concept exploit. Additional support was provided by [Tyler Butler](https://tbutler.org) who developed the dockerized application and testing enviorment. 
@@ -108,6 +111,8 @@ sudo apt-get install python3.6
 ```
 
 ## Test Against Our Server   
+*Edited 10/27/2020: The remote testing server is being shut down. Please contact [Tyler Butler](https://twitter.com/tbutler0x90) if you have questions about it*
+
 For a limited time, we are running a dockerized timeclock 1.01 on a remote digital ocean server. If you'd like to access the applicaiton, go to http://159.203.41.34/.  
 
 **Run the PoC**
